@@ -1,0 +1,68 @@
+
+
+
+
+-- Create Database
+CREATE DATABASE IF NOT EXISTS property_rent_db;
+USE property_rent_db;
+
+-- Admin Table for User Login
+CREATE TABLE IF NOT EXISTS Admin (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(100) NOT NULL
+);
+
+-- Insert default admin user (username: admin, password: admin)
+INSERT INTO Admin (username, password) 
+VALUES ('admin', 'admin');
+
+-- 1. City Table
+CREATE TABLE IF NOT EXISTS City (
+    cid INT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL
+);
+
+
+-- 2. Location Table
+CREATE TABLE IF NOT EXISTS Location (
+    locid INT PRIMARY KEY AUTO_INCREMENT,
+    locname VARCHAR(100) NOT NULL,
+    cid INT NOT NULL,
+    FOREIGN KEY (cid) REFERENCES City(cid)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- 3. Property Category Table
+CREATE TABLE IF NOT EXISTS PropCategory (
+    catid INT PRIMARY KEY AUTO_INCREMENT,
+    catname VARCHAR(100) NOT NULL UNIQUE
+);
+
+-- 4. Property Master Table
+CREATE TABLE IF NOT EXISTS PropertyMaster (
+    pid INT PRIMARY KEY AUTO_INCREMENT,
+    propname VARCHAR(100) NOT NULL,
+    address VARCHAR(255) NOT NULL UNIQUE,
+    locid INT NOT NULL,
+    catid INT NOT NULL,
+    FOREIGN KEY (locid) REFERENCES Location(locid)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+    FOREIGN KEY (catid) REFERENCES PropCategory(catid)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+-- 5. Property Sub Master Table (for area and rate)
+CREATE TABLE IF NOT EXISTS PropertySubMaster (
+    aid INT PRIMARY KEY AUTO_INCREMENT,
+    pid INT NOT NULL,
+    area INT NOT NULL,
+    ratepersqfeet INT NOT NULL,
+    FOREIGN KEY (pid) REFERENCES PropertyMaster(pid)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+

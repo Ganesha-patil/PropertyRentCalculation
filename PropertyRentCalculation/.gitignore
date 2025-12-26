@@ -1,0 +1,12 @@
+# Eclipse
+*.classpath
+*.project
+.settings/
+
+# Build files
+bin/
+out/
+
+# OS files
+.DS_Store
+Thumbs.db
